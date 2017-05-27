@@ -11,7 +11,7 @@ module.exports = appInfo => {
 
   // add your config here
   config.mongoose = {
-    url: 'mongodb://127.0.0.1/example',
+    url: 'mongodb://111.230.129.130:27017/pop-egg',
     options: {}
   };
   // config.security = {
