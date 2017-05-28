@@ -1,27 +1,34 @@
 module.exports = app => {
     class PopsService extends app.Service {
-        * index(ctx, params) {
+        * findPopsAll() {
             
-            let users = yield ctx.model.Pops.find(params);
-            let result = {};
-            result.meta = {
-                total: users.length
-            };
-            result.data = users;
-            return result;
+            let users = yield this.ctx.model.Pops.find({});
+             
+            this.result(true, 0, result);
         }
 
-        * show(ctx, params) {
-            let news =  yield this.ctx.model.Pops.find({popid:params.id});
-            let result = {};
-            result.meta = {total: news.length };
-            result.data = news;
-            return result;
+        * findPopWithPopid() {
+            let result =  yield this.ctx.model.Pops.findOne({popid:this.ctx.params.popid});
+            if(result) {
+                this.result(true, 0, result);
+            } else {
+                this.result(false, 200, "没有pop信息");
+            }   
         }
 
-        * create(ctx, request) {
+        * findPopsNearBy() {
+            if(!this.ctx.params.lat || !this.ctx.params.lon) {
+                return this.result(false, 101);
+            }
+            // findPopsAll 先用这个替代所有附近的超市信息
+            let users = yield this.ctx.model.Pops.find({});
+            
+            this.result(true, 0, users);
+        }
 
-            if (!request) {
+        * createPop() {
+
+            if (!this.ctx.request.body) {
                 return
             };
             
@@ -35,15 +42,30 @@ module.exports = app => {
                 new: true
             });
             
-            request.popid = doc.uid;
-            console.log("###############222",request);
-            let result = yield ctx.model.Pops.create(request);
+            this.ctx.request.body.popid = doc.uid;
+            let result = yield ctx.model.Pops.create(this.ctx.request.body);
             
             return result;
         }
 
-        * destroy(ctx, params) {
-            let result = this.ctx.model.Pops.remove({"popid":{ $in:params.id.split(',')}});
+        * updatePop() {
+            if(!this.ctx.params.popid) {
+                return this.result(false, 101);
+            }
+            let result = yield this.ctx.model.Pops.findOneAndUpdate(
+                {"popid" : this.ctx.params.popid},
+                {
+                    $set:this.ctx.request.body
+                },
+                {returnNewDocument:true}
+            );
+            let re = (result!=null);
+
+            this.result(re, re ? 0:104, result);
+        }
+
+        * destroy() {
+            let result = this.ctx.model.Pops.remove({"popid":{ $in:this.ctx.params.popid.split(',')}});
             return result;
         }
         

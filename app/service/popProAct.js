@@ -2,10 +2,9 @@
 module.exports = app => {
     class PopProActService extends app.Service {
         
-        * findRedPacketByPopid(ctx, params) {
-            
-            if (!params) {
-                return;
+        * findRedPacketByPopid() {
+            if (!this.ctx.params.id) {
+                return this.result(false, 101, "缺少popid");
             };
             // 查找这家店关于红包的的有效活动
             let result = yield this.ctx.model.Activitys.findOne({"popid":params.id, "type":"redpacket", "valid":true});
@@ -17,16 +16,17 @@ module.exports = app => {
                         redpackets.push(data);
                     }
                 }
+
                 result._doc.redpackets = redpackets;
+                return this.result(redpackets.length > 0, redpackets.length > 0? 0:201, result);
             }
-            return result;
+            return this.result(false, 201);
         }
 
         // 查找促销活动
-        * findPromotionByPopid(ctx, params) {
-            
-            if (!params) {
-                return;
+        * findPromotionByPopid() {
+            if (!this.ctx.params.id) {
+                return this.result(false, 101, "缺少popid");
             };
             // 查找这家店关于红包的的有效活动
             let result = yield this.ctx.model.Activitys.findOne({"popid":params.id, "type":"promotion", "valid":true});
@@ -39,15 +39,16 @@ module.exports = app => {
                     }
                 }
                 result._doc.redpackets = redpackets;
+                return this.result(redpackets.length > 0, redpackets.length > 0? 0:201, result);
             }
-            return result;
+            return this.result(false, 201);
         }
         
         // 查找积分活动
         * findIntegrationByPopid(ctx, params) {
             
-            if (!params) {
-                return;
+            if (!this.ctx.params.id) {
+                return this.result(false, 101, "缺少popid");
             };
             // 查找这家店关于红包的的有效活动
             let result = yield this.ctx.model.Activitys.findOne({"popid":params.id, "type":"integration", "valid":true});
@@ -60,24 +61,44 @@ module.exports = app => {
                     }
                 }
                 result._doc.redpackets = redpackets;
+                return this.result(redpackets.length > 0, redpackets.length > 0? 0:201, result);
             }
-            return result;
+            return this.result(false, 201);
         }
 
-        * findProductsByid(ctx, params) {
-            if (!params) {
-                return;
+        * findProductsByProid() {   
+            if (!this.ctx.params.proid) {
+                return this.result(false, 101, "缺少proid");
             };
+            // 查找所有有效的产品
+            let theProduct = yield this.ctx.model.Products.findOne({"proid":this.ctx.params.proid, "valid":true});
+            if(theProduct && !theProduct.errors) {
+                theProduct._doc.activityDetailList = [];
+                for(var j=0; j<theProduct.activity.length; j++){ 
+                    // 查找所有有效的活动
+                    let dataList = yield this.ctx.model.Activitys.find({"valid":true, "activityid":theProduct.activity[j]});
+                    // 找到所有关于这件产品的活动（可能有红包，有积分的，有促销的）
+                    if(dataList && dataList.length > 0){
+                        theProduct._doc.activityDetailList.push(dataList);
+                    }
+                }
+                return this.result(true, 0, theProduct);
+            }
+            return this.result(false, 201);
+            
+        }
+        // 找到所有属性的产品，包含产品的活动信息
+        * findProductsWithAcitivty() {
 
-            // 查找每一个产品对应参与的活动
+            // 查找所有有效的产品
             let allProduct = yield this.ctx.model.Products.find({"valid":true});
             for(var i=0; i<allProduct.length; i++){ 
                 // let result = allProduct[i];
-
                 if(!allProduct[i].errors) {
                     allProduct[i]._doc.activityDetailList = [];
                     for(var j=0; j<allProduct[i].activity.length; j++){ 
-                        let dataList = yield this.ctx.model.Activitys.find({"activityid":allProduct[i].activity[j]});
+                        // 查找所有有效的活动
+                        let dataList = yield this.ctx.model.Activitys.find({"valid":true, "activityid":allProduct[i].activity[j]});
                         // 找到所有关于这件产品的活动（可能有红包，有积分的，有促销的）
                         if(dataList && dataList.length > 0){
                             allProduct[i]._doc.activityDetailList.push(dataList);
@@ -85,57 +106,58 @@ module.exports = app => {
                     }
                 }
             }
-            return allProduct;
+            return this.result(true, 0, allProduct);
         }
 
         // 查找用户换购记录
-        * findTradeRecordByuid(ctx){
-            let allTradeIn = yield ctx.model.ScanProRecords.find({"uid":ctx.params.uid});
-            return allTradeIn;
+        * findTradeRecordByuid(){
+            let allTradeIn = yield this.ctx.model.ScanProRecords.find({"uid":this.ctx.params.uid});
+            this.result(true, 0, allTradeIn);
         }
 
         // 根据扫描的产品，更新用户的扫描记录和积分（商家给积分，平台给积分）
-        * updateIntegrationByProid(ctx){
-            if (!ctx.request.body) {
-                return;
-            };   
+        * updateIntegrationByProid(){
+            if (!this.ctx.request.body) {
+                return this.result(false, 101);
+            };
             
-            let uid = ctx.headers.uid;
-            let proid = ctx.request.body.proid;
-            let activityid = ctx.request.body.activityid;
+            let uid = this.ctx.headers.uid;
+            let proid = this.ctx.request.body.proid;
+            let activityid = this.ctx.request.body.activityid;
             // 换购的规则
-            let ruleid = ctx.request.body.ruleid;
+            let tradeInid = this.ctx.request.body.tradeInid;
             // 累计积分规则
-            let integerationid = ctx.request.body.integerationid;
+            let integerationid = this.ctx.request.body.integerationid;
             if(!uid || !proid || !activityid || !integerationid) {
-                return "参数不正确";
+                return this.result(false, 101, "缺少请求参数");
             }
-            let scanedProduct = yield ctx.model.Products.findOne({"proid":proid, "valid":true});
+            let scanedProduct = yield this.ctx.model.Products.findOne({"proid":proid, "valid":true});
             // 判断有无此产品
-            if(scanedProduct) {
+            if(scanedProduct && !scanedProduct.errors) {
                 // 判断有无此活动
-                 let activity = yield ctx.model.Activitys.findOne({"activityid":activityid,"type":"integration"});
+                 let activity = yield this.ctx.model.Activitys.findOne({"valid":true, "activityid":activityid, "type":"integration"});
                  
                  if(activity && activity.detailRef.length > 0 ) {
                      let hasRef = false;
-                     for(var j=0; j<activity.detailRef.length; j++){ 
-                        if(activity.detailRef[j] == ruleid) {
+                     // 当前的活动是否包含扫描提交上来的tradeInid
+                     for(var j=0; j < activity.detailRef.length; j++){ 
+                        if(activity.detailRef[j] == tradeInid) {
                             hasRef = true;
                             break;
                         }
                      }
                     if(!hasRef) {
-                        return;
+                        return this.result(false, 301);
                     }
                     // 查找换购规则累积积分规则，换购规则valid，则加积分，和 ScanProRecords的增加
-                    let tradeInProduct = yield ctx.model.TradeInRules.findOne({"tradeInid":ruleid});
+                    let tradeInProduct = yield this.ctx.model.TradeInRules.findOne({"tradeInid":tradeInid});
 
                     if(tradeInProduct && tradeInProduct.valid) {
-
-                        let count = yield ctx.model.ScanProRecords.count({"uid":uid,"ruleid":ruleid});
+                        // 查找已经扫描获取到的数量
+                        let count = yield this.ctx.model.ScanProRecords.count({"uid":uid, "ruleid":tradeInid});
                         if(count < tradeInProduct.collectionCount) {
                                                     
-                            let tradeIn = yield ctx.model.Idg.findOneAndUpdate({
+                            let tradeIn = yield this.ctx.model.Idg.findOneAndUpdate({
                                     myModelName: "tradeInCounter"
                                 }, {
                                     $inc: {
@@ -146,26 +168,34 @@ module.exports = app => {
                                 });
 
                               // 查询积分的规则
-                            let integrationProduct = yield ctx.model.IntegrationRules.findOne({"integrationid":integerationid});    
+                            let integrationProduct = yield this.ctx.model.IntegrationRules.findOne({"integrationid":integerationid});    
 
-                            // 根据换购规则，支持换购，就添加到扫描产品的记录表中
-                            let ss = yield ctx.model.ScanProRecords.create({
-                                "recordid":tradeIn.uid,
-                                "uid":uid,
-                                "proid":proid,
-                                "ruleid":ruleid,
-                                "proName":scanedProduct.productName,
-                                "brandid":tradeInProduct.brandid,
-                                "brand":tradeInProduct.brand,
-                                "guangIntegration":integrationProduct.guangIntegration,
-                                "popIntegration":integrationProduct.popIntegration }); 
-                            return ss;
+                            if(integrationProduct && !integrationProduct.errors) {
+                                 // 根据换购规则，支持换购，就添加到扫描产品的记录表中
+                                let ss = yield this.ctx.model.ScanProRecords.create({
+                                    "recordid":tradeIn.uid,
+                                    "uid":uid,
+                                    "proid":proid,
+                                    "tradeInid":tradeInid,
+                                    "proName":scanedProduct.productName,
+                                    "brandid":tradeInProduct.brandid,
+                                    "brand":tradeInProduct.brand,
+                                    "guangIntegration":integrationProduct.guangIntegration,
+                                    "popIntegration":integrationProduct.popIntegration }); 
+                                return this.result(true, 0, ss);
+                            } else {
+                                return this.result(false, 302);
+                            }
+                           
                         } else {
-                            return "nono";
+                            return this.result(false, 304);
                         }
                     } 
+                 } else {
+                     return this.result(false, 302);
                  }
             }
+            this.result(false, 303);
 
         }
     }

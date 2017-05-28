@@ -7,7 +7,7 @@ module.exports = app => {
         proName : {type : String}, // 产品名字
         brandid : { type: Number},
         brand : { type: String},
-        ruleid: { type: Number},// 对应积分规则表
+        tradeInid: { type: Number},// 对应积分规则表
         discount : { type : Number},
         type : {type : Number}, // 活动类型， 0 红包活动 1 积分活动
         popid : {type : Number}, // 活动提供的 商家

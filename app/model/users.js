@@ -5,7 +5,7 @@ module.exports = app => {
     userName: { type : String },
     password: { type : String },
     nickName: { type : String },
-    sex: { type : Number },
+    sex: { type : Number ,'default' : 0},// 0 男 1女
     headerImg : { type : String},
     birthday:{ type: Date, 'default' : Date.now },
     area:{ type : String},
