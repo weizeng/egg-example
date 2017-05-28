@@ -4,7 +4,7 @@ module.exports = app => {
             
             let users = yield this.ctx.model.Pops.find({});
              
-            this.result(true, 0, result);
+            this.result(true, 0, users);
         }
 
         * findPopWithPopid() {
