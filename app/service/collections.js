@@ -1,36 +1,26 @@
 module.exports = app => {
     class CollectionsService extends app.Service {
-        * index(ctx, params) {
+        * index() {
             
-            let allCollections = yield ctx.model.Collections.find({});
-            let result = {};
-            result.meta = {
-                total: allCollections.length
-            };
-            result.data = allCollections;
-            return result;
+            let allCollections = yield this.ctx.model.Collections.find({});
+            this.result(true, 0 , allCollections);
         }
 
-        * show(ctx, params) {
+        * show() {
             let news = yield this.ctx.model.Collections.find({
                 collectionid: params.id
             });
-            let result = {};
-            result.meta = {
-                total: news.length
-            };
-            result.data = news;
-            return result;
+            this.result(true, 0 , news);
         }
 
         // 创建用户自己的收藏
-        * create(ctx, request) {
+        * create() {
 
-            if (!request) {
-                return
+            if (!this.ctx.request.body) {
+                return this.result(false, 101);
             };
 
-            let doc = yield ctx.model.Idg.findOneAndUpdate({
+            let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "collectionCounter"
             }, {
                 $inc: {
@@ -40,20 +30,23 @@ module.exports = app => {
                 new: true
             });
 
-            request.collectionid = doc.uid;
-            let result = yield ctx.model.Collections.create(request);
+            this.ctx.request.body.collectionid = doc.uid;
+            let res = yield ctx.model.Collections.create(this.ctx.request.body);
 
-            return result;
+            this.result(true, 0 , res);
         }
 
         // 删除用户收藏
-        * destroy(ctx, params) {
-            let result = ctx.model.Collections.remove({
+        * deleteCollection() {
+            if (!this.ctx.headers.uid) {
+                return this.result(false, 101);
+            };
+            let res = yield this.ctx.model.Collections.remove({
                 "collectionid": {
-                    $in: params.id.split(',')
+                    $in: this.ctx.params.id.split(',')
                 }
             });
-            return result;
+            this.result(true, 0 , res);
         }
 
         // * update(ctx, params) {
@@ -69,60 +62,61 @@ module.exports = app => {
         //     return result;
         // }
 
-        * updateCollectionByUidAndOther(ctx) {
-            let uid = ctx.headers.uid;
-            let collectionid = ctx.params.collectionid;
+        * updateCollectionByUidAndOther() {
+            let uid = this.ctx.headers.uid;
+            let collectionid = this.ctx.params.collectionid;
             if(!uid || !collectionid) {
-                return;
+                this.result(false, 101);
             }
             let modify = {};
-            if(ctx.params.liked) {
-                modify.liked = ctx.params.liked;
+            if(this.ctx.params.liked) {
+                modify.liked = this.ctx.params.liked;
             }
-            if(ctx.params.collected) {
-                modify.collected = ctx.params.collected;
+            if(this.ctx.params.collected) {
+                modify.collected = this.ctx.params.collected;
             }
-            
+            if(this.ctx.params.wishWell) {
+                modify.wishWell = this.ctx.params.wishWell;
+            }
             // let modify = {"liked" : ctx.params.commented,"liked" : params.liked};
-             let result = yield ctx.model.Collections.findOneAndUpdate(
+             let res = yield this.ctx.model.Collections.findOneAndUpdate(
                 {"uid" : uid, "collectionid": collectionid},
                 {
-                    $set:{"liked":ctx.params.liked, "collected":ctx.params.collected}
+                    $set:{"liked":this.ctx.params.liked, "collected":this.ctx.params.collected, "wishWell":this.ctx.params.wishWell}
                 }
             );
-            return result;
+            this.result(true, 0, res);
         }
         
-        * findCollectionByUidAndOther(ctx) {
-            let uid = ctx.headers.uid;
+        * findCollectionByUidAndOther() {
+            let uid = this.ctx.headers.uid;
             if(!uid) {
-                return;
+                this.result(false, 101);
             }
             let queryArray = [];
             let queryOr = {};
-            if(ctx.params.liked == 1){
-                queryArray.push({"liked":ctx.params.liked });
-            }
-            if(ctx.params.wishWell == 1){
-                queryArray.push({"wishWell":ctx.params.wishWell });
-            }
-            if(ctx.params.collected == 1){
-                queryArray.push({"collected":ctx.params.collected });
-            }
+            // if(this.ctx.params.liked == 1){
+                queryArray.push({"liked":this.ctx.params.liked });
+            // }
+            // if(this.ctx.params.wishWell == 1){
+                queryArray.push({"wishWell":this.ctx.params.wishWell });
+            // }
+            // if(this.ctx.params.collected == 1){
+                queryArray.push({"collected":this.ctx.params.collected });
+            // }
             if(queryArray.length > 0) {
                 queryOr = {
                         "$or": queryArray
                     };
             }
 
-            let allCollections = yield ctx.model.Collections.find({
+            let allCollections = yield this.ctx.model.Collections.find({
                 "$and": [{
                         "uid": uid
-                    },queryOr
-                    
+                    },queryOr   
                 ]
             });
-            return allCollections;
+           this.result(true, 0, allCollections);
         }
     }
     return CollectionsService;

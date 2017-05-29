@@ -28,6 +28,18 @@ module.exports = app => {
                 return "没有您要查找的产品哦";
             } else if(errorCode == 304) {
                 return "您已经达到换购条件";
+            } else if(errorCode == 305) {
+                return "创建活动必须有活动的类型，如redpacket";
+            } else if(errorCode == 306) {
+                return "创建活动不包含您指定的活动规则类型，输入如redpacket";
+            } else if(errorCode == 307) {
+                return "创建活动需要知道您是哪个合作方，如official";
+            } else if(errorCode == 308) {
+                return "创建活动需要指定popid";
+            } else if(errorCode == 401) {
+                return "有奖红包问卷需要指定questionsPage";
+            } else if(errorCode == 402) {
+                return "有奖红包问卷需要指定reward";
             } 
 
             return "未知错误，立即告诉我";

@@ -13,8 +13,8 @@ module.exports = app => {
     wexinToken : {type : String}, // 微信 Token
     xcxToken : { type : String}, // 小程序 Token
     qqToken : {type : String}, // qqToken
-    vip : { type : Number},
-    popIntegration : { type : Number},// 商户积分
+    vip : { type : Number}, // vip 
+    popIntegration : { type : Array},// 商户积分 [{"brandid":1,"brand":"雀巢vip", "integration":1000}]
     guangIntegration : { type : Number},// 逛逛平台积分
     lastUpdate:{ type: Date, 'default' : Date.now },
     createDate:{ type: Date, 'default' : Date.now }

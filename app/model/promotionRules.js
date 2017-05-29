@@ -5,7 +5,8 @@ module.exports = app => {
         promotionid : {type : Number, default: 0},
         name : {type : String},
         intro : { type : String},// 规则说明
-        brandid : { type : Array},
+        proid : { type : Number},// 产品id
+        brandid : { type : Number},// 品牌id
         promStore : { type : Number},// 促销库存
         promSkuPrice : { type : Number},// 促销单价
         promSkuCount : { type : Number},// 促销多瓶 如两瓶

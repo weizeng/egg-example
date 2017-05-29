@@ -1,31 +1,32 @@
 module.exports = app => {
     class ActivitysService extends app.Service {
-        * index(ctx, params) {
-            
-            let users = yield ctx.model.Activitys.find(params);
-            let result = {};
-            result.meta = {
-                total: users.length
-            };
-            result.data = users;
-            return result;
+        * index() {
+            let users = yield this.ctx.model.Activitys.find(params);
+            this.result(true, 0 , users);
         }
 
-        * show(ctx, params) {
-            let news =  yield this.ctx.model.Activitys.find({activityid:params.id});
-            let result = {};
-            result.meta = {total: news.length };
-            result.data = news;
-            return result;
+        * show() {
+            let news =  yield this.ctx.model.Activitys.find({activityid:this.ctx.params.id});
+            this.result(true, 0, news);
         }
 
-        * create(ctx, request) {
-
-            if (!request) {
-                return
+        * create() {
+            if (!this.ctx.request.body) {
+                return this.result(fales, 101);
             };
-            
-            let doc = yield ctx.model.Idg.findOneAndUpdate({
+             if (!this.ctx.request.popid) {
+                return this.result(fales, 308);
+            };
+            if (!this.ctx.request.body.type) {
+                return this.result(fales, 305);
+            };
+            if(!this.ctx.request.body.type == 'redpacket' && !this.ctx.request.body.type == 'promotion' && !this.ctx.request.body.type == 'integration') {
+                return this.result(fales, 306);
+            }
+            if (!this.ctx.request.body.platform) {
+                return this.result(fales, 307);
+            }; 
+            let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "activityCounter"
             }, {
                 $inc: {
@@ -35,16 +36,16 @@ module.exports = app => {
                 new: true
             });
             
-            request.activityid = doc.uid;
-            console.log("###############222",request);
-            let result = yield ctx.model.Activitys.create(request);
+            this.ctx.request.body.activityid = doc.uid;
+
+            let res = yield this.ctx.model.Activitys.create(this.ctx.request.body);
             
-            return result;
+            this.result(true, 0, res);
         }
 
-        * destroy(ctx, params) {
-            let result = this.ctx.model.Activitys.remove({"activityid":{ $in:params.id.split(',')}});
-            return result;
+        * destroy() {
+            let res = this.ctx.model.Activitys.remove({"activityid":{ $in:this.ctx.params.id.split(',')}});
+            this.result(false, 0, res);
         }
         
     }

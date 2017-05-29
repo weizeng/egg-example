@@ -1,31 +1,23 @@
 module.exports = app => {
     class BrandsService extends app.Service {
-        * index(ctx, params) {
+        * index() {
             
-            let users = yield ctx.model.Brands.find(params);
-            let result = {};
-            result.meta = {
-                total: users.length
-            };
-            result.data = users;
-            return result;
+            let users = yield this.ctx.model.Brands.find(params);
+            this.result(true, 0, users);
         }
 
-        * show(ctx, params) {
-            let news =  yield this.ctx.model.Brands.find({brandid:params.id});
-            let result = {};
-            result.meta = {total: news.length };
-            result.data = news;
-            return result;
+        * show() {
+            let news =  yield this.ctx.model.Brands.find({brandid:this.ctx.params.id});
+            this.result(true, 0, news);
         }
 
-        * create(ctx, request) {
+        * create() {
 
-            if (!request) {
-                return
+            if (!this.ctx.request.body) {
+                return this.result(false, 101);
             };
             
-            let doc = yield ctx.model.Idg.findOneAndUpdate({
+            let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "brandCounter"
             }, {
                 $inc: {
@@ -35,16 +27,14 @@ module.exports = app => {
                 new: true
             });
             
-            request.brandid = doc.uid;
-            console.log("###############222",request);
-            let result = yield ctx.model.Brands.create(request);
-            
-            return result;
+            this.ctx.request.body.brandid = doc.uid;
+            let res = yield ctx.model.Brands.create(this.request.body);
+            this.result(true, 0 , res);
         }
 
         * destroy(ctx, params) {
-            let result = this.ctx.model.Brands.remove({"brandid":{ $in:params.id.split(',')}});
-            return result;
+            let res = this.ctx.model.Brands.remove({"brandid":{ $in:this.ctx.params.id.split(',')}});
+            this.result(true, 0 , res);
         }
         
     }

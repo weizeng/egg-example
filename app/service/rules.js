@@ -1,20 +1,23 @@
+'use strict';
+
 module.exports = app => {
     class RulesService extends app.Service {
-        * index(params) {
-            let users = yield this.ctx.model.users.find(params);
-            let result = {};
-            result.meta = {
-                total: users.length
-            };
-            result.data = users;
-            return result;
+        * index() {
+            let users = yield this.ctx.model.users.find({});
+            return this.result(true, 0, users);
         }
 
-        * createRedpacketRules(ctx, request) {
-            if (!request) {
-                return
+        * createRedpacketRules() {
+            if (!this.ctx.request.body) {
+                return this.result(false, 101);
             };
-            let doc = yield ctx.model.Idg.findOneAndUpdate({
+            if (!this.ctx.request.body.questionsPage) {
+                return this.result(false, 401);
+            };
+            if (!this.ctx.request.body.reward) {
+                return this.result(false, 402);
+            };
+            let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "redpacketCounter"
             }, {
                 $inc: {
@@ -24,17 +27,16 @@ module.exports = app => {
                 new: true
             });
             
-            request.redpacketid = doc.uid;
-            let result = yield ctx.model.RedpacketRules.create(request);
-            console.log(result);
-            return result;
+            this.ctx.request.body.redpacketid = doc.uid;
+            let res = yield this.ctx.model.RedpacketRules.create(this.ctx.request.body);
+            this.result(true, 0, res);
         }
 
-          * createTradeInRules(ctx, request) {
-            if (!request) {
-                return
+          * createTradeInRules() {
+            if (!this.ctx.request.body) {
+                return this.result(false, 101);
             };
-            let doc = yield ctx.model.Idg.findOneAndUpdate({
+            let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "tradeInCounter"
             }, {
                 $inc: {
@@ -44,15 +46,14 @@ module.exports = app => {
                 new: true
             });
             
-            request.tradeInid = doc.uid;
-            let result = yield ctx.model.TradeInRules.create(request);
-            console.log(result);
-            return result;
+            this.ctx.request.body.tradeInid = doc.uid;
+            let res = yield this.ctx.model.TradeInRules.create(this.ctx.request.body);
+            this.result(true, 0, res);
         }
 
-        * createIntegrationRules(ctx, request) {
-            if (!request) {
-                return
+        * createIntegrationRules() {
+            if (!this.ctx.request.body) {
+                return this.result(false, 101);
             };
             let doc = yield ctx.model.Idg.findOneAndUpdate({
                 myModelName: "integrationCounter"
@@ -64,17 +65,16 @@ module.exports = app => {
                 new: true
             });
             
-            request.integrationid = doc.uid;
-            let result = yield ctx.model.IntegrationRules.create(request);
-            console.log(result);
-            return result;
+            this.ctx.request.body.integrationid = doc.uid;
+            let res = yield this.ctx.model.IntegrationRules.create(this.ctx.request.body);
+            this.result(true, 0, res);
         }
 
-        * createPromotionRules(ctx, request) {
-            if (!request) {
-                return
+        * createPromotionRules() {
+            if (!this.ctx.request.body) {
+                return this.result(false, 101);
             };
-            let doc = yield ctx.model.Idg.findOneAndUpdate({
+            let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "promotionCounter"
             }, {
                 $inc: {
@@ -84,10 +84,9 @@ module.exports = app => {
                 new: true
             });
             
-            request.promotionid = doc.uid;
-            let result = yield ctx.model.PromotionRules.create(request);
-            console.log(result);
-            return result;
+            this.ctx.request.body.promotionid = doc.uid;
+            let res = yield this.ctx.model.PromotionRules.create(this.ctx.request.body);
+            this.result(true, 0, res);
         }
     }
     return RulesService;

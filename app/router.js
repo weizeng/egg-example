@@ -19,6 +19,7 @@ module.exports = app => {
 
   app.get('/api/collections/:collected/:liked/:wishWell', app.controller.collections.findCollectionByUidAndOther);
   app.post('/api/collections', app.controller.collections.create);
+  app.delete('/api/collections/:id', app.controller.collections.deleteCollection);
   app.put('/api/collections/:collectionid/:collected/:liked/:wishWell', app.controller.collections.updateCollectionByUidAndOther);
 
   // 创建红包规则的玩法
