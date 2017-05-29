@@ -9,7 +9,7 @@ module.exports = app => {
 
         * createRedpacketRules() {
             if (!this.ctx.request.body) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             };
             if (!this.ctx.request.body.questionsPage) {
                 return this.result(false, 401);
@@ -34,7 +34,7 @@ module.exports = app => {
 
           * createTradeInRules() {
             if (!this.ctx.request.body) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             };
             let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "tradeInCounter"
@@ -53,7 +53,7 @@ module.exports = app => {
 
         * createIntegrationRules() {
             if (!this.ctx.request.body) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             };
             let doc = yield ctx.model.Idg.findOneAndUpdate({
                 myModelName: "integrationCounter"
@@ -72,7 +72,7 @@ module.exports = app => {
 
         * createPromotionRules() {
             if (!this.ctx.request.body) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             };
             let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "promotionCounter"

@@ -4,7 +4,7 @@ module.exports = app => {
         
         * findRedPacketByPopid() {
             if (!this.ctx.params.id) {
-                return this.result(false, 101, "缺少popid");
+                return this.result(false, 100, "缺少popid");
             };
             // 查找这家店关于红包的的有效活动
             let result = yield this.ctx.model.Activitys.findOne({"popid":params.id, "type":"redpacket", "valid":true});
@@ -26,7 +26,7 @@ module.exports = app => {
         // 查找促销活动
         * findPromotionByPopid() {
             if (!this.ctx.params.id) {
-                return this.result(false, 101, "缺少popid");
+                return this.result(false, 100, "缺少popid");
             };
             // 查找这家店关于红包的的有效活动
             let result = yield this.ctx.model.Activitys.findOne({"popid":params.id, "type":"promotion", "valid":true});
@@ -48,7 +48,7 @@ module.exports = app => {
         * findIntegrationByPopid(ctx, params) {
             
             if (!this.ctx.params.id) {
-                return this.result(false, 101, "缺少popid");
+                return this.result(false, 100, "缺少popid");
             };
             // 查找这家店关于红包的的有效活动
             let result = yield this.ctx.model.Activitys.findOne({"popid":params.id, "type":"integration", "valid":true});
@@ -66,11 +66,12 @@ module.exports = app => {
             return this.result(false, 201);
         }
 
+        // 查找对应产品的所有有效的活动
         * findProductsByProid() {   
             if (!this.ctx.params.proid) {
-                return this.result(false, 101, "缺少proid");
+                return this.result(false, 100, "缺少proid");
             };
-            // 查找所有有效的产品
+            
             let theProduct = yield this.ctx.model.Products.findOne({"proid":this.ctx.params.proid, "valid":true});
             if(theProduct && !theProduct.errors) {
                 theProduct._doc.activityDetailList = [];
@@ -87,7 +88,7 @@ module.exports = app => {
             return this.result(false, 201);
             
         }
-        // 找到所有属性的产品，包含产品的活动信息
+        // 找到所有的产品，包含产品的所有活动信息
         * findProductsWithAcitivty() {
 
             // 查找所有有效的产品
@@ -118,7 +119,7 @@ module.exports = app => {
         // 根据扫描的产品，更新用户的扫描记录和积分（商家给积分，平台给积分）
         * updateIntegrationByProid(){
             if (!this.ctx.request.body) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             };
             
             let uid = this.ctx.headers.uid;
@@ -129,7 +130,7 @@ module.exports = app => {
             // 累计积分规则
             let integerationid = this.ctx.request.body.integerationid;
             if(!uid || !proid || !activityid || !integerationid) {
-                return this.result(false, 101, "缺少请求参数");
+                return this.result(false, 100, "缺少请求参数");
             }
             let scanedProduct = yield this.ctx.model.Products.findOne({"proid":proid, "valid":true});
             // 判断有无此产品

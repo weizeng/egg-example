@@ -14,7 +14,7 @@ module.exports = app => {
         * create() {
 
             if (!this.ctx.request.body) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             };
             
             let doc = yield this.ctx.model.Idg.findOneAndUpdate({

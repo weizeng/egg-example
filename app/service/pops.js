@@ -18,7 +18,7 @@ module.exports = app => {
 
         * findPopsNearBy() {
             if(!this.ctx.params.lat || !this.ctx.params.lon) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             }
             // findPopsAll 先用这个替代所有附近的超市信息
             let users = yield this.ctx.model.Pops.find({});
@@ -50,7 +50,7 @@ module.exports = app => {
 
         * updatePop() {
             if(!this.ctx.params.popid) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             }
             let result = yield this.ctx.model.Pops.findOneAndUpdate(
                 {"popid" : this.ctx.params.popid},

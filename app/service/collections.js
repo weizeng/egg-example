@@ -17,7 +17,7 @@ module.exports = app => {
         * create() {
 
             if (!this.ctx.request.body) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             };
 
             let doc = yield this.ctx.model.Idg.findOneAndUpdate({
@@ -26,9 +26,7 @@ module.exports = app => {
                 $inc: {
                     'uid': 1
                 }
-            }, {
-                new: true
-            });
+            }, {returnNewDocument:true});
 
             this.ctx.request.body.collectionid = doc.uid;
             let res = yield ctx.model.Collections.create(this.ctx.request.body);
@@ -39,13 +37,13 @@ module.exports = app => {
         // 删除用户收藏
         * deleteCollection() {
             if (!this.ctx.headers.uid) {
-                return this.result(false, 101);
+                return this.result(false, 100);
             };
             let res = yield this.ctx.model.Collections.remove({
                 "collectionid": {
                     $in: this.ctx.params.id.split(',')
                 }
-            });
+            },{returnNewDocument:true});
             this.result(true, 0 , res);
         }
 
@@ -66,7 +64,7 @@ module.exports = app => {
             let uid = this.ctx.headers.uid;
             let collectionid = this.ctx.params.collectionid;
             if(!uid || !collectionid) {
-                this.result(false, 101);
+                this.result(false, 100);
             }
             let modify = {};
             if(this.ctx.params.liked) {
@@ -83,7 +81,7 @@ module.exports = app => {
                 {"uid" : uid, "collectionid": collectionid},
                 {
                     $set:{"liked":this.ctx.params.liked, "collected":this.ctx.params.collected, "wishWell":this.ctx.params.wishWell}
-                }
+                },{returnNewDocument:true}
             );
             this.result(true, 0, res);
         }
@@ -91,7 +89,7 @@ module.exports = app => {
         * findCollectionByUidAndOther() {
             let uid = this.ctx.headers.uid;
             if(!uid) {
-                this.result(false, 101);
+                this.result(false, 100);
             }
             let queryArray = [];
             let queryOr = {};

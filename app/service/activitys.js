@@ -12,7 +12,7 @@ module.exports = app => {
 
         * create() {
             if (!this.ctx.request.body) {
-                return this.result(fales, 101);
+                return this.result(fales, 100);
             };
              if (!this.ctx.request.popid) {
                 return this.result(fales, 308);

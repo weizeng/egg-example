@@ -10,13 +10,23 @@ module.exports = app => {
   app.resources('brands', '/api/brands', app.controller.brands);
   app.resources('activitys', '/api/activitys', app.controller.activitys);
 
+  // 产品相关
+  app.post('/api/product/create', app.controller.products.createProduct);  
+  app.put('/api/product/update', app.controller.products.updateProduct);  
+  app.get('/api/product/:proid', app.controller.products.findOneProduct);  
+  app.get('/api/product', app.controller.products.findAllProduct);  
+  
+
+
+  // 店铺
   app.get('/api/pops', app.controller.pops.findPopsAll);  
   app.post('/api/pops', app.controller.pops.createPop);
   app.put('/api/pops', app.controller.pops.updatePop);
   app.delete('/api/pops/:popid', app.controller.pops.deletePop);
   app.get('/api/pops/nearby/:lat/:lon', app.controller.pops.findPopsNearBy);
   app.get('/api/pops/:popid', app.controller.pops.findPopWithPopid);
-
+  
+  // 收藏相关
   app.get('/api/collections/:collected/:liked/:wishWell', app.controller.collections.findCollectionByUidAndOther);
   app.post('/api/collections', app.controller.collections.create);
   app.delete('/api/collections/:id', app.controller.collections.deleteCollection);

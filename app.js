@@ -40,6 +40,12 @@ module.exports = app => {
                 return "有奖红包问卷需要指定questionsPage";
             } else if(errorCode == 402) {
                 return "有奖红包问卷需要指定reward";
+            } else if(errorCode == 501) {
+                return "创建产品，产品名字不能为空";
+            } else if(errorCode == 502) {
+                return "创建产品，产品名字必须有个品牌名";
+            } else if(errorCode == 503) {
+                return "创建产品，必须指定活动";
             } 
 
             return "未知错误，立即告诉我";
