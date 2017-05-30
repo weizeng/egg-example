@@ -10,6 +10,13 @@ module.exports = app => {
           this.failed();
         }
     };
+    * sendSmsCode() {
+      yield this.service.users.sendSmsCode();
+    }
+
+    * createByMobile() {
+      yield this.service.users.createByMobile();
+    }
 
     * create() {      
       yield this.service.users.create();

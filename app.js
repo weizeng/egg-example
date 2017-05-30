@@ -17,7 +17,7 @@ module.exports = app => {
             } else if(errorCode == 104) {
                 return "用户名不能更改！";
             } else if(errorCode == 105) {
-                return "";
+                return "电话号码已被使用";
             } else if(errorCode == 201) {
                 return "没有对应的数据";
             } else if(errorCode == 301) {

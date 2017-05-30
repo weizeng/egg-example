@@ -1,11 +1,15 @@
 'use strict';
 
 module.exports = app => {
-  app.get('/', 'home.index');
+  app.get('/home', 'home.index');
   app.get('/get', 'get');
   app.resources('users', '/api/users', app.controller.users);
   app.post('/api/users/login', app.controller.users.login);
   app.post('/api/users/updateUser', app.controller.users.updateUser);
+  // 发送短信验证码
+  app.post('/api/users/sendSmsCode', app.controller.users.sendSmsCode);
+  // 通过手机号码创建用户
+  app.post('/api/users/createByMobile', app.controller.users.createByMobile);
   
   app.resources('brands', '/api/brands', app.controller.brands);
   app.resources('activitys', '/api/activitys', app.controller.activitys);
