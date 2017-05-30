@@ -6,5 +6,5 @@ ADD . /app
 RUN npm install --production
 EXPOSE 7001
 
-CMD ["npm", "start", "> stdout.log 2> stderr.log"]
+CMD ["npm", "start"]
 #CMD ["node", "index.js"]
