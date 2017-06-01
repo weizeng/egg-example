@@ -3,7 +3,7 @@ module.exports = app => {
     class PopProActService extends app.Service {
         
         * findRedPacketByPopid() {
-            if (!this.ctx.params.id) {
+            if (!this.ctx.params.id) {// 如B0FFFDCATL
                 return this.result(false, 100, "缺少popid");
             };
             // 查找这家店关于红包的的有效活动

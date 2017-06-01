@@ -2,6 +2,7 @@ module.exports = app => {
   const mongoose = app.mongoose;
   const ProductSchema = new mongoose.Schema({
         proid : {type : Number, default: 0},
+        batchid : {type : Number, default: 0},// 进货批次区分同一个产品在不同的店铺
         productName : {type : String},
         brand : { type : String},
         subBrand : { type : String},

@@ -66,6 +66,11 @@ module.exports = app => {
             let res = yield this.ctx.model.Products.find({});
             this.result(true, 0, res);
         }
+        
+        // 判断次序：活动规则表(换购规则，红包规则，积分规则)，活动表，产品表(批次)，最后关联到对应pop店
+        * createMonitorData(){
+            
+        }
     }
     return ProductService;
 }

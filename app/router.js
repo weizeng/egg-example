@@ -27,7 +27,7 @@ module.exports = app => {
   app.post('/api/pops', app.controller.pops.createPop);
   app.put('/api/pops', app.controller.pops.updatePop);
   app.delete('/api/pops/:popid', app.controller.pops.deletePop);
-  app.get('/api/pops/nearby/:lat/:lon', app.controller.pops.findPopsNearBy);
+  app.get('/api/pops/nearby/:lonlat/:startPage', app.controller.pops.findPopsNearBy);
   app.get('/api/pops/:popid', app.controller.pops.findPopWithPopid);
   
   // 收藏相关
