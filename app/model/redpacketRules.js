@@ -5,7 +5,6 @@ module.exports = app => {
         redpacketid : {type : Number, default: 0},
         name : {type : String},
         intro : { type : String},
-        brandid : { type : Number},
         questionsPage : { type : Number},
         questionsUrl: { type : String},// 静态的网站地址
         reward : { type : Number}, // 奖励 10

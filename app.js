@@ -53,11 +53,13 @@ module.exports = app => {
         
         // service 直接返回结果
         result(success, errorCode, data) {
-            let resp = errorCode != 0? (data == null?this.errorDetail(errorCode):data):data;
+            let message = errorCode != 0 ? (data == null?this.errorDetail(errorCode):data):"";
+            let resp = errorCode != 0? {}:data;
             this.ctx.body = {
                 success:success,
                 error:errorCode,
-                data:resp
+                data:resp,
+                message:message
             }
         };
     }

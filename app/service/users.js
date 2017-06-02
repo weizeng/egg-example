@@ -55,7 +55,7 @@ module.exports = app => {
             if(existSmsCode && existSmsCode.length > 0 &&  existSmsCode[0]._doc.code == this.ctx.request.body.code) {
                 //  可以注册, 
                 let doc = yield this.ctx.model.Idg.findOneAndUpdate({
-                    myModelName: "counter"
+                    myModelName: "userCounter"
                 }, {
                     $inc: {
                         'uid': 1
@@ -127,6 +127,13 @@ module.exports = app => {
             this.result(re, re ? 0:104, result);
         }
 
+        * findUserIntergation() {
+            if (!this.ctx.headers.uid) {
+                return this.result(false, 102);
+            };
+            let result = yield this.ctx.model.BrandTradeIn.findOne({uid:this.ctx.headers.uid});
+            this.result(true, 0, result);
+        }
     }
     return UsersService;
 }

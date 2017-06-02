@@ -41,9 +41,8 @@ module.exports = app => {
                 for(let i = 0; i<rr.data.pois.length;i++) {
                     // 设置upsert,当记录不存在的时候插入
                     yield this.ctx.model.Pops.update(
-                        {id:rr.data.pois[i].id}, {$set: rr.data.pois[i]},{upsert:true});
+                        {id:rr.data.pois[i].id}, {$set: rr.data.pois[i]}, {upsert:true});
                     pois.push(rr.data.pois[i].id);
-
                 }
                 // 添加到查询记录表中 
                 yield this.ctx.model.PopSearchRecords.create({uid:this.ctx.headers.uid, popids:pois, location:this.ctx.params.lonlat, startPage: this.ctx.params.startPage, offSet: offset});

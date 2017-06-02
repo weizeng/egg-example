@@ -29,6 +29,10 @@ module.exports = app => {
     * updateUser() {
        yield this.service.users.updateUser();
     }
+
+    * findUserIntergation() {
+        yield this.service.users.findUserIntergation();
+    }
   }
   return UserController;
 };

@@ -8,5 +8,5 @@ module.exports = app => {
         // proid : {type : Number, default: 0},
         // brandid: {type : Number, default: 0},
     });
-    return mongoose.model('Idg', IdgSchema);
+    return mongoose.model('Idgs', IdgSchema);
 }

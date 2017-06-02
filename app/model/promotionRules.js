@@ -5,12 +5,11 @@ module.exports = app => {
         promotionid : {type : Number, default: 0},
         name : {type : String},
         intro : { type : String},// 规则说明
-        proid : { type : Number},// 产品id
         brandid : { type : Number},// 品牌id
-        promStore : { type : Number},// 促销库存
-        promSkuPrice : { type : Number},// 促销单价
-        promSkuCount : { type : Number},// 促销多瓶 如两瓶
-        promTotalPrice : { type : Number},// 促销多瓶的价格 如9.9
+        store : { type : Number},// 促销库存
+        skuPrice : { type : Number},// 促销单价
+        skuCount : { type : Number},// 促销多瓶 如两瓶
+        totalPrice : { type : Number},// 促销多瓶的价格 如9.9
         reward : { type : String}, // 奖励 积分？ 
         createDate:{ type: Date, 'default' : Date.now }
     });

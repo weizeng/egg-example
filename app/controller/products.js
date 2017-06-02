@@ -21,6 +21,9 @@ module.exports = app => {
     * findAllProduct() {
         yield this.service.products.findAllProduct();
     };
+     * createMonitorData() {
+        yield this.service.products.createMonitorData();
+    };
   }
   return ProductController;
 };

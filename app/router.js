@@ -10,6 +10,7 @@ module.exports = app => {
   app.post('/api/users/sendSmsCode', app.controller.users.sendSmsCode);
   // 通过手机号码创建用户
   app.post('/api/users/createByMobile', app.controller.users.createByMobile);
+  app.get('/api/users/userIntegration', app.controller.users.findUserIntergation);
   
   app.resources('brands', '/api/brands', app.controller.brands);
   app.resources('activitys', '/api/activitys', app.controller.activitys);
@@ -19,7 +20,7 @@ module.exports = app => {
   app.put('/api/product/update', app.controller.products.updateProduct);  
   app.get('/api/product/:proid', app.controller.products.findOneProduct);  
   app.get('/api/product', app.controller.products.findAllProduct);  
-  
+  app.get('/api/product/createMonitorData', app.controller.products.createMonitorData);  
 
 
   // 店铺
@@ -45,11 +46,7 @@ module.exports = app => {
   // 创建促销规则的玩法
   app.post('/api/rules/createPromotionRules', app.controller.rules.createPromotionRules);
   // 查找超市对应的红包活动
-  app.get('/api/popAct/redPacketAct/:id', app.controller.popProAct.findRedPacketByPopid);
-  // 查找超市对应的促销活动
-  app.get('/api/popAct/promotionAct/:id', app.controller.popProAct.findPromotionByPopid);
-  // 查找超市对应的积分活动
-  app.get('/api/popAct/integrationAct/:id', app.controller.popProAct.findIntegrationByPopid);
+  app.get('/api/popAct/findActivity/:id/:type', app.controller.popProAct.findActivityByPopidAndType);
   // 根据产品id,更新用户的积分和换购
   app.post('/api/popAct/integrationAct', app.controller.popProAct.updateIntegrationByProid);
   // 查找用户的换购记录

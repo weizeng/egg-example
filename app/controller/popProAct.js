@@ -5,18 +5,8 @@
 module.exports = app => {
     class PoProActService extends app.Service {
         // 根据popid查找红包        
-        * findRedPacketByPopid() {
-            yield this.service.popProAct.findRedPacketByPopid();
-        }
-
-        // 根据popid查找促销活动
-        * findPromotionByPopid () {
-            yield this.service.popProAct.findPromotionByPopid();
-        }
-        
-        // 根据popid查找积分活动
-        * findIntegrationByPopid(){
-            yield this.service.popProAct.findIntegrationByPopid();
+        * findActivityByPopidAndType() {
+            yield this.service.popProAct.findActivityByPopidAndType();
         }
 
         // 查找扫描后的产品列表，带有活动属性
