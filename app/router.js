@@ -56,4 +56,7 @@ module.exports = app => {
   // 找到指定产品的所有活动(用于扫描)
   app.get('/api/popAct/products/:proid', app.controller.popProAct.findProductsByProid);
 
+  app.get('/api/popAct/nearby/:lonlat', app.controller.popProAct.findPopAndActivityProductNearBy);
+  
+
 };

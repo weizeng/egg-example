@@ -26,6 +26,10 @@ module.exports = app => {
         * findTradeRecordByuid () {
             yield this.service.popProAct.findTradeRecordByuid();
         }
+
+        * findPopAndActivityProductNearBy() {
+            yield this.service.popProAct.findPopAndActivityProductNearBy();
+        }
     }
     return PoProActService;
 };

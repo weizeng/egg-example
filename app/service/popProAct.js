@@ -1,7 +1,65 @@
 
 module.exports = app => {
     class PopProActService extends app.Service {
-        
+        // 根据经纬度查找最近的店，并且显示该店的最新红包活动
+        * findPopAndActivityProductNearBy() {
+            let types = "060100|060200|060400";
+            // 一页10条
+            let offset = 1;
+            let key = "9f6f8d47a20046831364c8afcd16df59";
+            let url = "http://restapi.amap.com/v3/place/around?key="+key+"&location="+this.ctx.params.lonlat+"&types="+types+"&radius=1000&offset="+offset+"&page=1";
+            const rr = yield app.curl(url, {
+                method: 'GET',
+                dataType: 'json',
+            });
+            let resData = {};
+            if(rr.data && rr.data.status == '1') {
+                let pois = [];
+                resData.pop = rr.data.pois[0];
+                // 查找红包
+                // 测试只用这家,写死了, 重复代码
+                this.ctx.params.id = 'B0FFFDBWFO';
+                // 查找这家店关于促销的的有效活动
+                let result = yield this.ctx.model.ProductBatchs.findOne({"popid":this.ctx.params.id, "valid":true});
+                if(result) {
+                    let redpackets = [];
+                    for(var i=0; i<result.activity.length; i++){ 
+                        let data = yield this.ctx.model.Activitys.findOne({activityid:result.activity[i], type:"redpacket"});
+                        if(data) {
+                            redpackets.push(data);
+                        }
+                    }
+
+                    result._doc.activityDetail = redpackets;
+                    resData.activity = result;
+                    
+                }
+                return this.result(true, 0, resData);
+            }
+
+        }
+        * findProductsByProid() {   
+            if (!this.ctx.params.proid) {
+                return this.result(false, 100, "缺少proid");
+            };
+            
+            let theProduct = yield this.ctx.model.ProductBatchs.findOne({"proid":this.ctx.params.proid, "valid":true});
+            if(theProduct && !theProduct.errors) {
+                theProduct._doc.activityDetailList = [];
+                for(var j=0; j<theProduct.activity.length; j++){ 
+                    // 查找所有有效的活动
+                    let dataList = yield this.ctx.model.Activitys.find({"valid":true, "activityid":theProduct.activity[j]});
+                    // 找到所有关于这件产品的活动（可能有红包，有积分的，有促销的）
+                    if(dataList && dataList.length > 0){
+                        theProduct._doc.activityDetailList.push(dataList);
+                    }
+                }
+                return this.result(true, 0, theProduct);
+            }
+            return this.result(false, 201);
+            
+        }
+
         // 查找活动,根据提交的popid和活动类型判断
         * findActivityByPopidAndType() {
             if (!this.ctx.params.id) {
