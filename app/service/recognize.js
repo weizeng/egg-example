@@ -7,11 +7,12 @@ module.exports = app => {
         * recognizeProduct() {
             // 获取提交上来的文件流
             const stream = yield this.ctx.getFileStream();
-            var fileName = "/data/" + sd.format(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ".jpg";
+            var fileName = sd.format(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ".jpg";
+            var filePath = "/data/" + fileName;
             
-            console.log("图片保存路径是：" + fileName);
+            console.log("图片保存路径是：" + filePath);
             // 保存图片到本地
-            const ws = fs.createWriteStream(fileName);
+            const ws = fs.createWriteStream(filePath);
             stream.pipe(ws);
  
             // pipe 保存图片到指定路径, 然后curl一个请求
