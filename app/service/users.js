@@ -19,6 +19,11 @@ module.exports = app => {
             if (!this.ctx.request.body || !this.ctx.request.body.mobile) {
                 return this.result(false, 100);
             }
+            let existUser = yield this.ctx.model.Users.findOne({mobile:this.ctx.request.body.mobile});
+            if(existUser && existUser.mobile) {
+                return this.result(false, 105);
+            }
+
             // 使用云片短信
             const sms = new YUNPIAN.SMS({
                 apikey: 'e71179c31ed9930b44c3ec08c49f5bb7'
@@ -41,7 +46,7 @@ module.exports = app => {
 
         * createByMobile() {
             // 通过短信验证码注册
-            if (!this.ctx.request.body || !this.ctx.request.body.mobile || !this.ctx.request.body.code) {
+            if (!this.ctx.request.body || !this.ctx.request.body.mobile || !this.ctx.request.body.code || !this.ctx.request.body.password) {
                 // 电话号码为空，短信验证码为空
                 return this.result(false, 100);
             };
@@ -96,15 +101,19 @@ module.exports = app => {
         }
 
         * login() {
-            if (!this.ctx.request.body || !this.ctx.request.body.userName || !this.ctx.request.body.password) {
+            if (!this.ctx.request.body || !this.ctx.request.body.mobile || !this.ctx.request.body.password) {
                 return this.result(false, 100);
             };
-            
-            let user = yield this.ctx.model.Users.findOne({"userName":this.ctx.request.body.userName, "password":this.ctx.request.body.password},{"password":0});
+            let user = yield this.ctx.model.Users.findOne({"mobile":this.ctx.request.body.mobile, "password":this.ctx.request.body.password});
             if(user) {
                 return this.result(true, 0, user);
             } else {
-                return this.result(false, 103);
+                let existUser = yield this.ctx.model.Users.findOne({"mobile":this.ctx.request.body.mobile});
+                if(existUser) {
+                    return this.result(false, 103);
+                } else {
+                    return this.result(false, 106);
+                }
             }
         }
 

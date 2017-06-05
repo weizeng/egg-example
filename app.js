@@ -18,6 +18,8 @@ module.exports = app => {
                 return "用户名不能更改！";
             } else if(errorCode == 105) {
                 return "电话号码已被使用";
+            } else if(errorCode == 106) {
+                return "电话号码不存在";
             } else if(errorCode == 201) {
                 return "没有对应的数据";
             } else if(errorCode == 301) {
@@ -46,6 +48,8 @@ module.exports = app => {
                 return "创建产品，产品名字必须有个品牌名";
             } else if(errorCode == 503) {
                 return "创建产品，必须指定活动";
+            } else if(errorCode == 601) {
+                return "没有uid,请先登录";
             } 
 
             return "未知错误，立即告诉我";

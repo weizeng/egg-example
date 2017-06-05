@@ -19,10 +19,11 @@ module.exports = app => {
                 // 查找红包
                 // 测试只用这家,写死了, 重复代码
                 this.ctx.params.id = 'B0FFFDBWFO';
-                // 查找这家店关于促销的的有效活动
+                // 根据popid查找这家店的所有产品的有效产品
                 let result = yield this.ctx.model.ProductBatchs.findOne({"popid":this.ctx.params.id, "valid":true});
                 if(result) {
                     let redpackets = [];
+                    // 根据产品查询对应所参与的活动
                     for(var i=0; i<result.activity.length; i++){ 
                         let data = yield this.ctx.model.Activitys.findOne({activityid:result.activity[i], type:"redpacket"});
                         if(data) {
@@ -30,7 +31,7 @@ module.exports = app => {
                         }
                     }
 
-                    result._doc.activityDetail = redpackets;
+                    result._doc.redpacketDetail = redpackets;
                     resData.activity = result;
                     
                 }
@@ -126,12 +127,16 @@ module.exports = app => {
             // 换购的规则 && 累计积分规则，动态配置，可以只做换购，或者只做积分累积
             let tradeInid = this.ctx.request.body.tradeInid;
             let integerationid = this.ctx.request.body.integerationid;
+            if(!uid) {
+                return this.result(false, 601);
+            }
             if(!uid || !proid || !activityid) {
                 return this.result(false, 100, "缺少请求参数");
             }
             if(!tradeInid && !integerationid) {
                 return this.result(false, 100, "没有 换购/积分 规则");
             }
+            console.log(uid, proid, activityid, tradeInid, integerationid);
             // 暂时不针对popid
             let scanedProductBatch = yield this.ctx.model.ProductBatchs.find({"proid":proid, "valid":true, "activity":{"$in":[activityid]}}).limit(1);
             // 判断有无此产品
