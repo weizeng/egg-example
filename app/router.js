@@ -22,6 +22,8 @@ module.exports = app => {
   app.get('/api/product', app.controller.products.findAllProduct);  
   app.get('/api/product/createMonitorData', app.controller.products.createMonitorData);  
 
+  app.post('/api/product/recognize', app.controller.recognize.recognizeProduct);  
+
 
   // 店铺
   app.get('/api/pops', app.controller.pops.findPopsAll);  

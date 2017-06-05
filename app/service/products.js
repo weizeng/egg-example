@@ -87,9 +87,12 @@ module.exports = app => {
             if(exist && exist.length > 0) {
                 yield this.ctx.model.Brands.collection.drop();
             }
-             yield this.ctx.model.Brands.create({brandid:1, brandName:"可口可乐"});
-             yield this.ctx.model.Brands.create({brandid:2, brandName:"达能"});
-             yield this.ctx.model.Brands.create({brandid:3, brandName:"雀巢"});
+             yield this.ctx.model.Brands.create({brandid:0, brandName:"雀巢即饮"});
+             yield this.ctx.model.Brands.create({brandid:1, brandName:"百威啤酒"});
+             yield this.ctx.model.Brands.create({brandid:2, brandName:"优诺"});
+             yield this.ctx.model.Brands.create({brandid:3, brandName:"脉动"});
+             yield this.ctx.model.Brands.create({brandid:4, brandName:"依云"});
+             yield this.ctx.model.Brands.create({brandid:5, brandName:"可口可乐"});
 
             // 增加三个产品
             exist = yield this.ctx.model.Products.find({proid:{$exists:true}});
@@ -97,18 +100,34 @@ module.exports = app => {
                 yield this.ctx.model.Products.collection.drop();
             }
             yield this.ctx.model.Products.update(
+                        {proid:0}, {$set: 
+                            {  brandid:0, proName:"Nestle/雀巢即饮咖啡丝滑拿铁268ml*15整箱 ",brandName:"雀巢", subBrand:"雀巢咖啡", spec:"268ml", weight:500, unit:"箱", 
+                            pic:["https://g-search1.alicdn.com/img/bao/uploaded/i4/i3/TB1s5LWRXXXXXXhXFXXXXXXXXXX_!!0-item_pic.jpg_360x360Q90.jpg"], tag:["提神啊"]}, "valid":true}, {upsert:true});
+            yield this.ctx.model.Products.update(
                         {proid:1}, {$set: 
-                            { brandid:1, proName:"可口可乐瓶装",brandName:"可口可乐", subBrand:"芬达", spec:"规格不大", weight:500, unit:"瓶", 
-                            pic:["https://tse3-mm.cn.bing.net/th?id=OIP.VgHbN8FIIa198pTgg8Kw-gEsEs&w=185&h=185&c=7&qlt=90&o=4&dpr=2&pid=1.7"], tag:["冰了喝"]}, "valid":true}, {upsert:true});
+                            { brandid:1, proName:"Budweiser/百威啤酒经典醇正500ml*18听 整箱拉罐",brandName:"百威啤酒", subBrand:"百威啤酒", spec:"500ml", weight:500, unit:"箱", 
+                            pic:["https://g-search2.alicdn.com/img/bao/uploaded/i4/i1/TB14vTYOpXXXXaVaXXXXXXXXXXX_!!0-item_pic.jpg_360x360Q90.jpg"], tag:["冰了喝"]}, "valid":true}, {upsert:true});
              yield this.ctx.model.Products.update(
                         {proid:2}, {$set: 
-                            {  brandid:2, proName:"大能饮料啊 啊瓶装",brandName:"达能", subBrand:"脉动", spec:"规格不大", weight:500, unit:"瓶", 
-                            pic:["https://tse3-mm.cn.bing.net/th?id=OIP.VgHbN8FIIa198pTgg8Kw-gEsEs&w=185&h=185&c=7&qlt=90&o=4&dpr=2&pid=1.7"], tag:["加能量"]}, "valid":true}, {upsert:true});
+                            {  brandid:2, proName:"优诺优丝清香柠檬风味发酵乳135g*3",brandName:"优诺", subBrand:"优诺", spec:"135g", weight:500, unit:"瓶", 
+                            pic:["https://g-search1.alicdn.com/img/bao/uploaded/i4/i1/653025298/TB22c3ifbBmpuFjSZFuXXaG_XXa_!!653025298.jpg_360x360Q90.jpg"], tag:["加能量"]}, "valid":true}, {upsert:true});
+            
             yield this.ctx.model.Products.update(
                         {proid:3}, {$set: 
-                            {  brandid:3, proName:"雀巢咖啡瓶装",brandName:"雀巢", subBrand:"雀巢咖啡", spec:"规格不大", weight:500, unit:"瓶", 
-                            pic:["https://tse3-mm.cn.bing.net/th?id=OIP.VgHbN8FIIa198pTgg8Kw-gEsEs&w=185&h=185&c=7&qlt=90&o=4&dpr=2&pid=1.7"], tag:["提神啊"]}, "valid":true}, {upsert:true});
-            
+                            {  brandid:3, proName:"MIZONE/脉动维生素饮料青柠味 600ml*4/组",brandName:"脉动", subBrand:"脉动", spec:"规格不大", weight:500, unit:"瓶", 
+                            pic:["https://g-search1.alicdn.com/img/bao/uploaded/i4/i3/TB18.9iQpXXXXcFaXXXXXXXXXXX_!!0-item_pic.jpg_360x360Q90.jpg"], tag:["提神啊"]}, "valid":true}, {upsert:true});
+                      
+            yield this.ctx.model.Products.update(
+                        {proid:4}, {$set: 
+                            {  brandid:4, proName:"法国进口 evian/依云天然矿泉水500ml*24瓶",brandName:"依云", subBrand:"依云", spec:"500ml*24瓶", weight:500, unit:"瓶", 
+                            pic:["https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/1647706011092610125/TB2yg6gmNtmpuFjSZFqXXbHFpXa_!!0-saturn_solar.jpg_360x360Q90.jpg"], tag:["提神啊"]}, "valid":true}, {upsert:true});
+
+            yield this.ctx.model.Products.update(
+                        {proid:5}, {$set: 
+                            {  brandid:5, proName:"美国进口「可口可乐」樱桃口味 汽水355ml*6罐（不含玻璃",brandName:"可口可乐", subBrand:"可口可乐", spec:"规格不大", weight:500, unit:"瓶", 
+                            pic:["https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i3/1680305013431805350/TB2Zq8YfmFjpuFjSspbXXXagVXa_!!0-saturn_solar.jpg_360x360Q90.jpg"], tag:["提神啊"]}, "valid":true}, {upsert:true});
+
+
             exist = yield this.ctx.model.RedpacketRules.find({redpacketid:{$exists:true}});
             if(exist && exist.length > 0) {
                 yield this.ctx.model.RedpacketRules.collection.drop();
@@ -152,15 +171,21 @@ module.exports = app => {
                 yield this.ctx.model.ProductBatchs.collection.drop();
             }
             // 将proid，popid，activity的id增加到productBatchs
-            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"可口可乐芬达本批次由美国进口", proid:1, store:100, tag:["顺滑","口感好"], 
+            
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"Nestle/雀巢即饮咖啡丝滑拿铁268ml*15整箱", proid:0, store:100, tag:["顺滑","口感好"], 
+            popid:"B0FFFDBWFO", activity:[1,2,3,4]});
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"Budweiser/百威啤酒经典醇正500ml*18听 整箱拉罐", proid:1, store:100, tag:["顺滑","口感好"], 
+            popid:"B0FFFDBWFO", activity:[1,2,3,4]});
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"优诺优丝清香柠檬风味发酵乳135g", proid:2, store:100, tag:["顺滑","口感好"], 
+            popid:"B0FFFDBWFO", activity:[1,2,3,4]});
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"MIZONE/脉动维生素饮料青柠味 600ml*4/组", proid:3, store:100, tag:["顺滑","口感好"], 
+            popid:"B0FFFDBWFO", activity:[1,2,3,4]});
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"法国进口 evian/依云天然矿泉水500ml*24瓶", proid:4, store:100, tag:["顺滑","口感好"], 
             popid:"B0FFFDBWFO", activity:[1,2,3,4]});
 
-            yield this.ctx.model.ProductBatchs.create({proBatchid:2, batchid:2, desc:"达能本批次由韩国进口", proid:2, store:120, tag:["顺滑2","口感好2"], 
+            yield this.ctx.model.ProductBatchs.create({proBatchid:2, batchid:2, desc:"美国进口「可口可乐」樱桃口味 汽水355ml*6罐（不含玻璃", proid:5, store:120, tag:["顺滑2","口感好2"], 
             popid:"B0FFFDBWFO", activity:[1,4]});
             
-            yield this.ctx.model.ProductBatchs.create({proBatchid:3, batchid:3, desc:"雀巢咖啡本批次由日本进口", proid:3, store:120, tag:["顺滑3","口感好3"], 
-            popid:"B0FFFDBWFO", activity:[3,4]});
-
             exist = yield this.ctx.model.ScanProRecords.find({uid:{$exists:true}});
             if(exist && exist.length > 0) {
                 yield this.ctx.model.ScanProRecords.collection.drop();
