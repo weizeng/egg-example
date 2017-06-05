@@ -7,8 +7,9 @@ module.exports = app => {
         * recognizeProduct() {
             // 获取提交上来的文件流
             const stream = yield this.ctx.getFileStream();
-            var fileName = "/home/tensorflow/pics/pics/" + sd.format(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ".jpg";
+            var fileName = "/data/" + sd.format(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ".jpg";
             
+            console.log("图片保存路径是：" + fileName);
             // 保存图片到本地
             const ws = fs.createWriteStream(fileName);
             stream.pipe(ws);
