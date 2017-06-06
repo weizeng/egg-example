@@ -131,9 +131,11 @@ module.exports = app => {
                 return this.result(false, 601);
             }
             if(!uid || !proid || !activityid) {
+                console.log("缺少1 " + uid +","+ proid +","+ activityid);
                 return this.result(false, 100, "缺少请求参数");
             }
             if(!tradeInid && !integerationid) {
+                console.log("缺少 2" + ","+tradeInid +","+ integerationid);
                 return this.result(false, 100, "没有 换购/积分 规则");
             }
             let exist = this.ctx.model.Users.findOne({uid:uid});
@@ -144,6 +146,7 @@ module.exports = app => {
             // 暂时不针对popid
             let scanedProductBatch = yield this.ctx.model.ProductBatchs.find({"proid":proid, "valid":true, "activity":{"$in":[activityid]}}).limit(1);
             // 判断有无此产品
+            console.log("详情:" + scanedProductBatch);
             if(scanedProductBatch && scanedProductBatch.length > 0 && !scanedProductBatch.errors) {
                 // 判断有无此活动
                 let activityObj, tradeObj;
@@ -241,7 +244,7 @@ module.exports = app => {
 
                 this.result(true, 0, ss);
             } else {
-                this.result(false, 302, "产品已经失效");
+                this.result(false, 302, "产品已经失效了");
             }
 
         }
