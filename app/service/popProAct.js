@@ -121,32 +121,30 @@ module.exports = app => {
                 return this.result(false, 100);
             };
             
-            let uid = this.ctx.headers.uid;
-            let proid = this.ctx.request.body.proid;
-            let activityid = this.ctx.request.body.activityid;
+            let uid = parseInt(this.ctx.headers.uid);
+            let proid = parseInt(this.ctx.request.body.proid);
+            let activityid = parseInt(this.ctx.request.body.activityid);
             // 换购的规则 && 累计积分规则，动态配置，可以只做换购，或者只做积分累积
-            let tradeInid = this.ctx.request.body.tradeInid;
-            let integerationid = this.ctx.request.body.integerationid;
+            let tradeInid = parseInt(this.ctx.request.body.tradeInid);
+            let integerationid = parseInt(this.ctx.request.body.integerationid);
             if(!uid) {
                 return this.result(false, 601);
             }
-            if(!uid || !proid || !activityid) {
-                console.log("缺少1 " + uid +","+ proid +","+ activityid);
+            if(!uid || !activityid) {
                 return this.result(false, 100, "缺少请求参数");
             }
             if(!tradeInid && !integerationid) {
-                console.log("缺少 2" + ","+tradeInid +","+ integerationid);
                 return this.result(false, 100, "没有 换购/积分 规则");
             }
             let exist = this.ctx.model.Users.findOne({uid:uid});
             if(!exist) {
                 return this.result(false, 100, "用户不存在");
             }
-            console.log(uid, proid, activityid, tradeInid, integerationid);
+
+            console.log("uid:"+uid, "proid:"+proid, "activityid:"+activityid, "tradeInid:"+tradeInid, "integerationid:"+integerationid);
             // 暂时不针对popid
             let scanedProductBatch = yield this.ctx.model.ProductBatchs.find({"proid":proid, "valid":true, "activity":{"$in":[activityid]}}).limit(1);
             // 判断有无此产品
-            console.log("详情:" + scanedProductBatch);
             if(scanedProductBatch && scanedProductBatch.length > 0 && !scanedProductBatch.errors) {
                 // 判断有无此活动
                 let activityObj, tradeObj;

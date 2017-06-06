@@ -40,7 +40,7 @@ module.exports = app => {
                 mobile: this.ctx.request.body.mobile,
                 text: '【逛逛网】'+randomNum+'(#有惊喜#手机验证码，请完成验证)，如非本人操作，请忽略本短信'
             });
-            this.result(res.code == 0, res.code);
+            this.result(res.code == 0, res.code, res.detail);
             
         }
 
