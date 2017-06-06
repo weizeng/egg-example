@@ -140,8 +140,14 @@ module.exports = app => {
             if (!this.ctx.headers.uid) {
                 return this.result(false, 102);
             };
-            let result = yield this.ctx.model.BrandTradeIn.findOne({uid:this.ctx.headers.uid});
-            this.result(true, 0, result);
+            let result = yield this.ctx.model.BrandTradeIn.find({uid:this.ctx.headers.uid});
+            let user = yield this.ctx.model.Users.findOne({uid:this.ctx.header.uid});
+            // 逛逛平台积分
+
+            // result._doc.guangIntegration = user.guangIntegration;
+            let rr = {brandTrade:result, guangIntegration:user.guangIntegration};
+
+            this.result(true, 0, rr);
         }
     }
     return UsersService;

@@ -136,6 +136,10 @@ module.exports = app => {
             if(!tradeInid && !integerationid) {
                 return this.result(false, 100, "没有 换购/积分 规则");
             }
+            let exist = this.ctx.model.Users.findOne({uid:uid});
+            if(!exist) {
+                return this.result(false, 100, "用户不存在");
+            }
             console.log(uid, proid, activityid, tradeInid, integerationid);
             // 暂时不针对popid
             let scanedProductBatch = yield this.ctx.model.ProductBatchs.find({"proid":proid, "valid":true, "activity":{"$in":[activityid]}}).limit(1);
@@ -209,7 +213,7 @@ module.exports = app => {
                                 brand:scanedProduct.brandName,
                                 records:scanRecords });
                 
-                // 更新或者创建用户积分表
+                
                 let brandTradeIn = yield this.ctx.model.BrandTradeIn.findOne({uid: uid, brandid: scanedProduct.brandid});
                 let hasTrade = false;
                 let newCount=1;
@@ -225,11 +229,16 @@ module.exports = app => {
                         yield this.ctx.model.BrandTradeIn.findOneAndUpdate({uid:uid, brandid:scanedProduct.brandid, "productTradeRecord.proid":proid}, {$inc: {'brandIntegration': popIntegrat}, $set:{"productTradeRecord.0.tradeCurrent":newCount}},{returnNewDocument:true});//
                     } else {
                         // create
-                        let dd = [{proid:proid, brandid:scanedProduct.brandid, proName:scanedProduct.proName, pic:"http://www.baidu.com", tradeTotal:tradeInRules.collectionCount, tradeCurrent:1, ruleid:tradeInid, type:"tradeIn"}];
+                        let dd = [{proid:proid, brandid:scanedProduct.brandid, proName:scanedProduct.proName, pic:scanedProduct.pic[0], tradeTotal:tradeInRules.collectionCount, tradeCurrent:1, ruleid:tradeInid, type:"tradeIn"}];
                         yield this.ctx.model.BrandTradeIn.create({brandIntegration:popIntegrat, uid:uid, brandid:scanedProduct.brandid, brandName: scanedProduct.brandName, level:"白金", productTradeRecord:dd});
                     }
+                    
                 }
                 
+                // 更新或者创建用户积分表
+                yield this.ctx.model.Users.update(
+                        {uid:uid}, {$inc:{guangIntegration: guangIntegrat}}, {upsert:true});
+
                 this.result(true, 0, ss);
             } else {
                 this.result(false, 302, "产品已经失效");

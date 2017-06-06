@@ -149,7 +149,7 @@ module.exports = app => {
             }
 
             // 增加三个活动规则, 促销，积分，换购，红包
-            yield this.ctx.model.RedpacketRules.create({redpacketid:1, name:"红包问答", intro:"有奖问答", questionsPage:10, reward:10});
+            yield this.ctx.model.RedpacketRules.create({redpacketid:1, name:"红包问答", intro:"有奖问答", questionsPage:10, questionsUrl:"https://wj.qq.com/s/1406878/a44d", reward:10});
             yield this.ctx.model.PromotionRules.create({promotionid:1, name:"两瓶9元", intro:"新品促销"});
             yield this.ctx.model.TradeInRules.create({tradeInid:1, name:"积分换购", intro:"换购换购", collectionCount:10});
             yield this.ctx.model.IntegrationRules.create({integrationid:1, name:"扫码累积积分", integrateCount:100, popIntegration:200, guangIntegration:150});
@@ -160,11 +160,11 @@ module.exports = app => {
             }
             
             // 将规则增加到活动表中
-            yield this.ctx.model.Activitys.create({valid:true, activityid:1, activityName:"沃尔玛红包活动", ruleid:1, platform:"official", type:"redpacket"});
-            yield this.ctx.model.Activitys.create({valid:true, activityid:2, activityName:"沃尔玛促销活动", ruleid:1, platform:"official", type:"promotion"});
+            yield this.ctx.model.Activitys.create({valid:true, activityid:1, activityName:"红包活动", tag:"红包", url:"https://wj.qq.com/s/1406878/a44d",ruleid:1, platform:"official", type:"redpacket"});
+            yield this.ctx.model.Activitys.create({valid:true, activityid:2, activityName:"促销活动", url:"两瓶9元",ruleid:1, platform:"official", type:"promotion"});
             // 换购自动触发
-            yield this.ctx.model.Activitys.create({valid:true, activityid:3, activityName:"沃尔玛换购活动", ruleid:1, platform:"official", type:"tradeIn"});
-            yield this.ctx.model.Activitys.create({valid:true, activityid:4, activityName:"沃尔玛积分活动", ruleid:1, platform:"official", type:"integration"});
+            yield this.ctx.model.Activitys.create({valid:true, activityid:3, activityName:"换购活动", url:"＋4元换购",ruleid:1, platform:"official", type:"tradeIn"});
+            yield this.ctx.model.Activitys.create({valid:true, activityid:4, activityName:"积分活动", url:"荐",ruleid:1, platform:"official", type:"integration"});
 
             exist = yield this.ctx.model.ProductBatchs.find({proBatchid:{$exists:true}});
             if(exist && exist.length > 0) {
@@ -172,18 +172,18 @@ module.exports = app => {
             }
             // 将proid，popid，activity的id增加到productBatchs
             
-            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"Nestle/雀巢即饮咖啡丝滑拿铁268ml*15整箱", proid:0, store:100, tag:["顺滑","口感好"], 
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"Nestle/雀巢即饮咖啡丝滑拿铁", proid:0, store:100, tag:["顺滑","口感好"], 
             popid:"B0FFFDBWFO", activity:[1,2,3,4]});
-            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"Budweiser/百威啤酒经典醇正500ml*18听 整箱拉罐", proid:1, store:100, tag:["顺滑","口感好"], 
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"Budweiser/百威啤酒经典醇正", proid:1, store:100, tag:["顺滑","口感好"], 
             popid:"B0FFFDBWFO", activity:[1,2,3,4]});
-            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"优诺优丝清香柠檬风味发酵乳135g", proid:2, store:100, tag:["顺滑","口感好"], 
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"优诺优丝清香柠檬风味发酵乳", proid:2, store:100, tag:["顺滑","口感好"], 
             popid:"B0FFFDBWFO", activity:[1,2,3,4]});
-            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"MIZONE/脉动维生素饮料青柠味 600ml*4/组", proid:3, store:100, tag:["顺滑","口感好"], 
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"MIZONE/脉动维生素饮料青柠味 ", proid:3, store:100, tag:["顺滑","口感好"], 
             popid:"B0FFFDBWFO", activity:[1,2,3,4]});
-            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"法国进口 evian/依云天然矿泉水500ml*24瓶", proid:4, store:100, tag:["顺滑","口感好"], 
+            yield this.ctx.model.ProductBatchs.create({proBatchid:1, batchid:1, desc:"法国进口 evian/依云天然矿泉水", proid:4, store:100, tag:["顺滑","口感好"], 
             popid:"B0FFFDBWFO", activity:[1,2,3,4]});
 
-            yield this.ctx.model.ProductBatchs.create({proBatchid:2, batchid:2, desc:"美国进口「可口可乐」樱桃口味 汽水355ml*6罐（不含玻璃", proid:5, store:120, tag:["顺滑2","口感好2"], 
+            yield this.ctx.model.ProductBatchs.create({proBatchid:2, batchid:2, desc:"美国进口「可口可乐」樱桃口味 汽水", proid:5, store:120, tag:["顺滑2","口感好2"], 
             popid:"B0FFFDBWFO", activity:[1,4]});
             
             exist = yield this.ctx.model.ScanProRecords.find({uid:{$exists:true}});

@@ -28,7 +28,7 @@ module.exports = app => {
             }; 
             let doc = yield this.ctx.model.Idg.findOneAndUpdate({
                 myModelName: "activityCounter"
-            }, {
+        }, {
                 $inc: {
                     'uid': 1
                 }
