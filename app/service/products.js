@@ -161,10 +161,10 @@ module.exports = app => {
             
             // 将规则增加到活动表中
             yield this.ctx.model.Activitys.create({valid:true, activityid:1, activityName:"红包活动", tag:"红包", url:"https://wj.qq.com/s/1406878/a44d",ruleid:1, platform:"official", type:"redpacket"});
-            yield this.ctx.model.Activitys.create({valid:true, activityid:2, activityName:"促销活动", url:"两瓶9元",ruleid:1, platform:"official", type:"promotion"});
+            yield this.ctx.model.Activitys.create({valid:true, activityid:2, activityName:"促销活动", tag:"积分换购",url:"https://wj.qq.com/s/1406878/a44d",ruleid:1, platform:"official", type:"promotion"});
             // 换购自动触发
-            yield this.ctx.model.Activitys.create({valid:true, activityid:3, activityName:"换购活动", url:"＋4元换购",ruleid:1, platform:"official", type:"tradeIn"});
-            yield this.ctx.model.Activitys.create({valid:true, activityid:4, activityName:"积分活动", url:"荐",ruleid:1, platform:"official", type:"integration"});
+            yield this.ctx.model.Activitys.create({valid:true, activityid:3, activityName:"换购活动", tag:"＋4元换购l",url:"https://wj.qq.com/s/1406878/a44d",ruleid:1, platform:"official", type:"tradeIn"});
+            yield this.ctx.model.Activitys.create({valid:true, activityid:4, activityName:"积分活动", tag:"荐",url:"https://wj.qq.com/s/1406878/a44d",ruleid:1, platform:"official", type:"integration"});
 
             exist = yield this.ctx.model.ProductBatchs.find({proBatchid:{$exists:true}});
             if(exist && exist.length > 0) {

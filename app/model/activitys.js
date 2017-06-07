@@ -4,6 +4,7 @@ module.exports = app => {
         activityid : {type : Number, default: 0, unique:true},
         activityName : {type : String},
         tag : {type : String},// +4元换购 
+        url : {type : String},// +4元换购 
         address : { type : String},
         startDate : { type: Date, 'default' : Date.now },
         endDate : { type: Date, 'default' : Date.now },
