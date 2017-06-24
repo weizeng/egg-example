@@ -4,7 +4,7 @@ var YUNPIAN = require('yunpian-sdk');
 
 module.exports = app => {
   class HomeController extends app.Controller {
-    * index() {
+    * sendSmsCode() {
       // this.success("ff");
             
       const sms = new YUNPIAN.SMS({
@@ -20,7 +20,9 @@ module.exports = app => {
       this.ctx.body = 'hi, egg22';
     }
 
-    
+    * player() {
+      yield this.ctx.render('player.html');
+    }
   }
   return HomeController;
 };

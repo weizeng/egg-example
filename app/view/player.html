@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Qiniu VOD Player Demo</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Qiniu VOD player demo">
+
+        <link rel="stylesheet" href="http://player.qiniucc.com/sdk/latest/qiniuplayer.min.css?v=0.3.3">
+
+        <!--[if lt IE 9]>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <video id="demo-video" class="video-js vjs-big-play-centered"></video>
+
+        <script src="http://player.qiniucc.com/sdk/latest/qiniuplayer.min.js?v=0.3.3"></script>
+        <script>
+            var url = 'http://pili-live-hls.bearya.com/family/stream_b.m3u8';
+            new QiniuPlayer('demo-video', {
+                engineOrder : ['html5', 'flash'],
+                autoplay    : false,
+                preload     : 'auto',
+                controls    : true,
+                poster      : 'https://player.qiniucc.com/qiniu-620x205.png',
+                file        : url,
+                type        : "hls"
+            });
+        </script>
+    </body>
+</html>

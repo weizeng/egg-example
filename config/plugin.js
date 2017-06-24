@@ -11,3 +11,18 @@ exports.proxyworker = {
   enable: true,
   package: 'egg-development-proxyworker',
 };
+
+// exports.view = {
+//   enable: false,
+//   package: 'egg-view-react',
+// };
+
+exports.io = {
+  enable: true,
+  package: 'egg-socket.io',
+};
+
+exports.nunjucks = {
+  enable: true,
+  package: 'egg-view-nunjucks'
+};

@@ -23,5 +23,12 @@ module.exports = appInfo => {
   config.security = {
       csrf : false,
   };
+  config.view = {
+    defaultViewEngine: 'nunjucks',
+    mapping: {
+      '.tpl': 'nunjucks',
+    },
+  };
+
   return config;
 };

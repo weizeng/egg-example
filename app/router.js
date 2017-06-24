@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports = app => {
-  app.get('/home', 'home.index');
+  app.get('/home', 'home.sendSmsCode');
+  app.get('/player', 'home.player');
   app.get('/get', 'get');
   app.resources('users', '/api/users', app.controller.users);
   app.post('/api/users/login', app.controller.users.login);
