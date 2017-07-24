@@ -82,7 +82,7 @@ module.exports = app => {
                 {
                     $set:this.ctx.request.body
                 },
-                {returnNewDocument:true}
+                {new:true}
             );
             let re = (result!=null);
 

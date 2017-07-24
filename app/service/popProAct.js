@@ -227,7 +227,7 @@ module.exports = app => {
                 }
                 if(tradeInid) {
                     if(hasTrade) {
-                        yield this.ctx.model.BrandTradeIn.findOneAndUpdate({uid:uid, brandid:scanedProduct.brandid, "productTradeRecord.proid":proid}, {$inc: {'brandIntegration': popIntegrat}, $set:{"productTradeRecord.0.tradeCurrent":newCount}},{returnNewDocument:true});//
+                        yield this.ctx.model.BrandTradeIn.findOneAndUpdate({uid:uid, brandid:scanedProduct.brandid, "productTradeRecord.proid":proid}, {$inc: {'brandIntegration': popIntegrat}, $set:{"productTradeRecord.0.tradeCurrent":newCount}},{new:true});//
                     } else {
                         // create
                         let dd = [{proid:proid, brandid:scanedProduct.brandid, proName:scanedProduct.proName, pic:scanedProduct.pic[0], tradeTotal:tradeInRules.collectionCount, tradeCurrent:1, ruleid:tradeInid, type:"tradeIn"}];

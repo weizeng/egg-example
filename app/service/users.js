@@ -65,7 +65,7 @@ module.exports = app => {
                     $inc: {
                         'uid': 1
                     }
-                }, {returnNewDocument:true});
+                }, {new:true});
                 
                 this.ctx.request.body.uid = doc.uid;
 
@@ -92,7 +92,7 @@ module.exports = app => {
                 $inc: {
                     'uid': 1
                 }
-            }, {returnNewDocument:true});
+            }, {new:true});
             
             this.ctx.request.body.uid = doc.uid;
 
@@ -129,7 +129,7 @@ module.exports = app => {
                 {
                     $set:this.ctx.request.body
                 },
-                {returnNewDocument:true}
+                {new:true}
             );
             let re = (result!=null);
 

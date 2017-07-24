@@ -26,7 +26,7 @@ module.exports = app => {
                 $inc: {
                     'uid': 1
                 }
-            }, {returnNewDocument:true});
+            }, {new:true});
 
             this.ctx.request.body.collectionid = doc.uid;
             let res = yield ctx.model.Collections.create(this.ctx.request.body);
@@ -43,7 +43,7 @@ module.exports = app => {
                 "collectionid": {
                     $in: this.ctx.params.id.split(',')
                 }
-            },{returnNewDocument:true});
+            },{new:true});
             this.result(true, 0 , res);
         }
 
@@ -81,7 +81,7 @@ module.exports = app => {
                 {"uid" : uid, "collectionid": collectionid},
                 {
                     $set:{"liked":this.ctx.params.liked, "collected":this.ctx.params.collected, "wishWell":this.ctx.params.wishWell}
-                },{returnNewDocument:true}
+                },{new:true}
             );
             this.result(true, 0, res);
         }
